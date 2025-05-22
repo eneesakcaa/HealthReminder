@@ -27,6 +27,8 @@ import androidx.navigation.NavController
 @Composable
 fun stock_page(navController : NavController) {
     Box(modifier = Modifier.fillMaxSize()) {
+
+
         Row(
             modifier = Modifier.padding(2.dp).fillMaxWidth(),
             horizontalArrangement = Arrangement.Center

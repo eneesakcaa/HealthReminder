@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Create
@@ -35,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import java.lang.String.format
@@ -48,6 +50,8 @@ fun medicine_page(navController : NavController){
     var medicine_mg by remember { mutableStateOf("") }
     var selectedTime by remember{mutableStateOf("")}
     var selectedDate by remember { mutableStateOf("") }
+    var stock by remember { mutableStateOf("") }
+    var alertStock by remember { mutableStateOf("") }
 
 
 
@@ -90,7 +94,7 @@ fun medicine_page(navController : NavController){
                 OutlinedTextField(modifier = Modifier.padding(20.dp,0.dp,20.dp,30.dp),
                     value = medicine_mg,
                     onValueChange = {medicine_mg = it},
-                    label = {Text("İlaç mg giriniz")}
+                    label = {Text("İlaç mg giriniz")},keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
             }
             Row(
@@ -129,6 +133,26 @@ fun medicine_page(navController : NavController){
                     }
                 )
             }
+
+            Row() {
+                OutlinedTextField(modifier = Modifier.padding(20.dp,0.dp,20.dp,30.dp),
+                    value = stock,
+                    onValueChange = {stock = it},
+                    label = {Text("Elinizde kaç tablet ilaç var")},keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number
+                    )
+                )
+            }
+
+            Row() {
+                OutlinedTextField(modifier = Modifier.padding(20.dp,0.dp,20.dp,30.dp),
+                    value = alertStock,
+                    onValueChange = {alertStock = it},
+                    label = {Text("Kaç tablet kalınca uyarı istersiniz")},
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)// klavyede giriş için sayı çıkacak
+                )
+            }
+
 
 
         }

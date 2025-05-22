@@ -26,10 +26,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.enesakca.healthreminder.database.MedicineViewModel
 
 @Composable
-fun account_detail_page(navController : NavController){
+fun account_detail_page(navController : NavController,
+                        viewModel: MedicineViewModel = viewModel())
+{
 
     var new_name_text by remember { mutableStateOf("") }
     var new_surname_text by remember {mutableStateOf("")}
@@ -50,9 +54,15 @@ fun account_detail_page(navController : NavController){
                 Button(onClick = {navController.navigate("")},modifier = Modifier.padding(15.dp)) {
                     Text("Düzenle")
                 }
-                Button(onClick = {navController.navigate("")},modifier = Modifier.padding(15.dp)) {
+                Button(modifier = Modifier.padding(15.dp),onClick = {
+                    viewModel.logout()
+                    navController.navigate("login") {
+                        popUpTo("main_page") { inclusive = true } // Tüm backstack'i temizle
+                    }
+                }) {
                     Text("Çıkış Yap")
                 }
+
             }
         }
 

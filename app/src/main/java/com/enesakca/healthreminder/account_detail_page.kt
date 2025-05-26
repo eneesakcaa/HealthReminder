@@ -35,25 +35,12 @@ fun account_detail_page(navController : NavController,
                         viewModel: MedicineViewModel = viewModel())
 {
 
-    var new_name_text by remember { mutableStateOf("") }
-    var new_surname_text by remember {mutableStateOf("")}
     Box(modifier = Modifier.fillMaxSize()){
 
         Column(modifier = Modifier.padding(15.dp).align(Alignment.Center)) {
-            OutlinedTextField(modifier = Modifier.padding(20.dp,0.dp,20.dp,30.dp),
-                value = new_name_text,
-                onValueChange = {new_name_text = it},
-                label = {Text("Adınızı Yeniden Giriniz")}
-            )
-            OutlinedTextField(modifier = Modifier.padding(20.dp,0.dp,20.dp,30.dp),
-                value = new_surname_text,
-                onValueChange = {new_surname_text = it},
-                label = {Text("Soyadınızı Yeniden Giriniz")}
-            )
+
             Row(modifier = Modifier.padding(2.dp).align(Alignment.CenterHorizontally)) {
-                Button(onClick = {navController.navigate("")},modifier = Modifier.padding(15.dp)) {
-                    Text("Düzenle")
-                }
+
                 Button(modifier = Modifier.padding(15.dp),onClick = {
                     viewModel.logout()
                     navController.navigate("login") {
@@ -71,8 +58,8 @@ fun account_detail_page(navController : NavController,
 
         Row(modifier = Modifier
             .align(Alignment.BottomCenter)
-            .fillMaxWidth().background(color = MaterialTheme.colorScheme.primaryContainer), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Bottom){
-            Column(modifier = Modifier.padding(20.dp,0.dp,20.dp,0.dp)){
+            .fillMaxWidth().background(color = MaterialTheme.colorScheme.primaryContainer),horizontalArrangement = Arrangement.SpaceEvenly ){
+            Column(){
 
                 Image(bitmap = ImageBitmap.imageResource(id = R.drawable.home), contentDescription = "home_button", modifier = Modifier.align(
                     Alignment.CenterHorizontally)
@@ -82,7 +69,7 @@ fun account_detail_page(navController : NavController,
                     ))
                 Text(text = "Ana Sayfa")
             }
-            Column(modifier = Modifier.padding(20.dp,0.dp,20.dp,0.dp)){
+            Column(){
 
                 Image(bitmap = ImageBitmap.imageResource(id = R.drawable.medicine) ,contentDescription = "medicine_button", modifier = Modifier.align(
                     Alignment.CenterHorizontally)
@@ -92,7 +79,7 @@ fun account_detail_page(navController : NavController,
                     ))
                 Text(text = "İlaç Ekle")
             }
-            Column(modifier = Modifier.padding(20.dp,0.dp,20.dp,0.dp)){
+            Column(){
 
                 Image(bitmap = ImageBitmap.imageResource(id = R.drawable.time_stock), contentDescription = "stock_button", modifier = Modifier.align(
                     Alignment.CenterHorizontally)
@@ -102,7 +89,7 @@ fun account_detail_page(navController : NavController,
                     ))
                 Text(text = "Stok")
             }
-            Column(modifier = Modifier.padding(20.dp,0.dp,20.dp,0.dp)){
+            Column(){
 
                 Image(bitmap = ImageBitmap.imageResource(id = R.drawable.account_profile), contentDescription = "account_button_image", modifier = Modifier.align(
                     Alignment.CenterHorizontally)

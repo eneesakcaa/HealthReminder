@@ -1,5 +1,6 @@
 package com.enesakca.healthreminder
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -30,6 +32,9 @@ fun login(navController: NavController,
           viewModel: MedicineViewModel = viewModel()
 
 ){
+
+    val context = LocalContext.current
+    val preferences = remember { PreferencesHelper(context) }
     var firstName by remember { mutableStateOf("") }
     var lastName by remember {mutableStateOf("")}
     var rememberMe by remember { mutableStateOf(viewModel.rememberMeChecked) }
@@ -56,12 +61,18 @@ fun login(navController: NavController,
 
 
             Button(modifier = Modifier.align(Alignment.CenterHorizontally),onClick = {
+
+                if(firstName.isBlank() || lastName.isBlank()){
+                    Toast.makeText(context, "Lütfen adınızı ve soyadınızı girin!", Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
                 val user = User(
                     firstName = firstName,
                     lastName = lastName
                 )
-                viewModel.handleLoginOrRegister(user, rememberMe)
-                navController.navigate("main_page") // Ana ekrana yönlendir
+                viewModel.loginUser(user, rememberMe)
+                preferences.currentUserId = user.userID
+                navController.navigate("main_page")
             }) {
                 Text("Kayıt Ol")
             }

@@ -11,37 +11,67 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-
+import com.enesakca.healthreminder.database.Medicine
+import com.enesakca.healthreminder.database.MedicineViewModel
 
 
 @Composable
-fun stock_page(navController : NavController) {
+fun stock_page(navController : NavController, viewModel : MedicineViewModel = viewModel()) {
+
+
+
+    val medicines: List<Medicine> by viewModel.medicines.observeAsState(initial = emptyList())
+    if (medicines.isEmpty()){
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("Kayıtlı ilaç bulunamadı", style = MaterialTheme.typography.bodyLarge)
+        }
+    } else {
+        LazyColumn(modifier = Modifier.padding(16.dp)) {
+            items(
+                items = medicines,
+                key = { medicine -> medicine.medicineID }
+            ) { medicine ->
+                StockItem(medicine = medicine)
+            }
+        }
+
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
 
 
-        Row(
-            modifier = Modifier.padding(2.dp).fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(modifier = Modifier.padding(5.dp), text = "stock page")
-        }
+
         Row(
             modifier = Modifier
                 .align(Alignment.BottomCenter).fillMaxWidth()
                 .background(color = MaterialTheme.colorScheme.primaryContainer),
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Column(modifier = Modifier.padding(20.dp, 0.dp, 20.dp, 0.dp)) {
+            Column() {
 
                 Image(
                     bitmap = ImageBitmap.imageResource(id = R.drawable.home),
@@ -55,7 +85,7 @@ fun stock_page(navController : NavController) {
                         ))
                 Text(text = "Ana Sayfa")
             }
-            Column(modifier = Modifier.padding(20.dp, 0.dp, 20.dp, 0.dp)) {
+            Column() {
 
                 Image(
                     bitmap = ImageBitmap.imageResource(id = R.drawable.medicine),
@@ -69,7 +99,7 @@ fun stock_page(navController : NavController) {
                         ))
                 Text(text = "İlaç ekle")
             }
-            Column(modifier = Modifier.padding(20.dp, 0.dp, 20.dp, 0.dp)) {
+            Column() {
 
                 Image(
                     bitmap = ImageBitmap.imageResource(id = R.drawable.time_stock),
@@ -83,7 +113,7 @@ fun stock_page(navController : NavController) {
                         ))
                 Text(text = "Stok", color = Color.Red)
             }
-            Column(modifier = Modifier.padding(20.dp, 0.dp, 20.dp, 0.dp)) {
+            Column() {
 
                 Image(
                     bitmap = ImageBitmap.imageResource(id = R.drawable.account_profile),
@@ -102,4 +132,60 @@ fun stock_page(navController : NavController) {
 
     }
 
+}
+
+@Composable
+fun StockItem(medicine: Medicine) {
+
+
+    val isLowStock = medicine.stock <= medicine.alertStock
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (isLowStock) Color.Red
+            else MaterialTheme.colorScheme.surface
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column {
+                Text(
+                    text = medicine.name,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = "${medicine.medicineDosage} mg",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = "${medicine.stock} adet",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = if (isLowStock) Color.Red
+                    else MaterialTheme.colorScheme.onSurface
+                )
+
+                if (isLowStock) {
+                    Icon(
+                        imageVector = Icons.Default.Warning,
+                        contentDescription = "Düşük Stok",
+                        tint = Color.Red,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }
+            }
+        }
+    }
 }

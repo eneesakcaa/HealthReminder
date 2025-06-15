@@ -27,6 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.layout.ContentScale
 
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
@@ -46,6 +48,14 @@ fun main_page(navController: NavController, viewModel: MedicineViewModel = viewM
 
     Box(modifier = Modifier.fillMaxSize()){
 
+
+        Image(
+            painter = painterResource(id = R.drawable.bg),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.matchParentSize().alpha(0.7f)
+        )
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -55,6 +65,7 @@ fun main_page(navController: NavController, viewModel: MedicineViewModel = viewM
                 MedicineItem(
                     medicine = item.medicine,
                     isTaken = item.isTaken,
+
                     onCheckedChange = { checked ->
                         viewModel.updateStatus(
                             item.medicine.medicineID, checked
@@ -120,10 +131,12 @@ fun MedicineItem(
     isTaken: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
+
         elevation = CardDefaults.cardElevation(4.dp),
 
     ) {

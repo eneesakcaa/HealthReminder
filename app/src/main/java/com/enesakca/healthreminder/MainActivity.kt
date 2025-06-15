@@ -56,9 +56,9 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(Unit) {
                 delay(1000)
                 if (authViewModel.isUserLoggedIn()) {
-                    navController.navigate("main_page") // Ana ekrana git
+                    navController.navigate("main_page")
                 } else {
-                    navController.navigate("login") // Giriş ekranına git
+                    navController.navigate("login")
                 }
             }
             HealthReminderTheme {
@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier.fillMaxSize(),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    // Logo ve yükleniyor animasyonu
+
                                     Image(painter = painterResource(R.drawable.logo), contentDescription = "Logo")
                                     CircularProgressIndicator()
                                 }

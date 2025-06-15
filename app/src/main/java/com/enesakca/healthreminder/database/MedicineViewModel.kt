@@ -35,6 +35,8 @@ class MedicineViewModel(application: Application): AndroidViewModel(application)
     val currentUser: LiveData<User>
     get() = repository.getUser(preferences.currentUserId)
 
+
+
     init {
         val db = AppDatabase.getDatabase(application)
         repository = MedicineRepository(
@@ -57,10 +59,7 @@ class MedicineViewModel(application: Application): AndroidViewModel(application)
     }
     val medicines: LiveData<List<Medicine>>
         get() = repository.getMedicinesByUser(preferences.currentUserId)
-    /*
-    val userMedicines: LiveData<List<Medicine>>
-        get() = repository.getMedicinesByUser(preferences.currentUserId)
-*/
+
 
     fun loadTodayMedicines() {
         viewModelScope.launch {
@@ -82,8 +81,6 @@ class MedicineViewModel(application: Application): AndroidViewModel(application)
         }
     }
 
-
-    //Çıkış Yap
     fun logout() {
         preferences.rememberMe = false
         preferences.currentUserId = -1
@@ -97,8 +94,6 @@ class MedicineViewModel(application: Application): AndroidViewModel(application)
         }
     }
 
-
-    // Otomatik giriş kontrolü
     fun isUserLoggedIn(): Boolean {
         return preferences.rememberMe && preferences.currentUserId != -1
     }

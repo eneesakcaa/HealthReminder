@@ -3,7 +3,7 @@ package com.enesakca.healthreminder.database
 import androidx.lifecycle.LiveData
 import java.time.LocalDate
 
-//veri işlemlerini merkezi bir noktada toplamak icin
+
 
 class MedicineRepository(private val medicineDao: MedicineDao,private val userDao : UserDao,private val medicineRecordDao: MedicineRecordDao) {
 
@@ -11,7 +11,7 @@ class MedicineRepository(private val medicineDao: MedicineDao,private val userDa
     fun getUser(userId: Int) = userDao.getUserById(userId)
 
 
-    //son eklemelerden
+
     suspend fun getMedicinesByUserSuspend(userId: Int): List<Medicine> {
         return medicineDao.getMedicinesByUserSuspend(userId)
     }
@@ -54,11 +54,12 @@ class MedicineRepository(private val medicineDao: MedicineDao,private val userDa
 
     suspend fun insertMedicine(medicine: Medicine) = medicineDao.insertMedicine(medicine)
 
+
     fun getMedicinesByUser(userId: Int): LiveData<List<Medicine>> {
         return medicineDao.getMedicinesByUser(userId)
     }
 
-    fun getAllMedicines(): LiveData<List<Medicine>> = medicineDao.getAllMedicines()
+
 
 
 

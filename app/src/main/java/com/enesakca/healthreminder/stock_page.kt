@@ -26,9 +26,12 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -42,27 +45,34 @@ fun stock_page(navController : NavController, viewModel : MedicineViewModel = vi
 
 
     val medicines: List<Medicine> by viewModel.medicines.observeAsState(initial = emptyList())
-    if (medicines.isEmpty()){
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("Kayıtlı ilaç bulunamadı", style = MaterialTheme.typography.bodyLarge)
-        }
-    } else {
-        LazyColumn(modifier = Modifier.padding(16.dp)) {
-            items(
-                items = medicines,
-                key = { medicine -> medicine.medicineID }
-            ) { medicine ->
-                StockItem(medicine = medicine)
-            }
-        }
 
-    }
 
     Box(modifier = Modifier.fillMaxSize()) {
 
+        Image(
+            painter = painterResource(id = R.drawable.bg),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.matchParentSize().alpha(0.7f)
+        )
+        if (medicines.isEmpty()){
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Kayıtlı ilaç bulunamadı", style = MaterialTheme.typography.bodyLarge)
+            }
+        } else {
+            LazyColumn(modifier = Modifier.padding(16.dp)) {
+                items(
+                    items = medicines,
+                    key = { medicine -> medicine.medicineID }
+                ) { medicine ->
+                    StockItem(medicine = medicine)
+                }
+            }
+
+        }
 
 
         Row(
@@ -165,7 +175,7 @@ fun StockItem(medicine: Medicine) {
                 Text(
                     text = "${medicine.medicineDosage} mg",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+
                 )
             }
 
@@ -178,6 +188,8 @@ fun StockItem(medicine: Medicine) {
                 )
 
                 if (isLowStock) {
+                    Text(
+                        text = "${medicine.stock} adet")
                     Icon(
                         imageVector = Icons.Default.Warning,
                         contentDescription = "Düşük Stok",

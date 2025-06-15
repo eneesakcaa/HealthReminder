@@ -15,7 +15,7 @@ interface MedicineRecordDao {
     @Update
     suspend fun updateMedicineRecord(record: MedicineRecord)
 
-    @Query("SELECT * FROM medicine_records WHERE medicineId = :medicineId AND date = :date")
+    @Query("SELECT * FROM medicine_records WHERE medicineID = :medicineId AND date = :date")
     suspend fun getRecord(medicineId: Int, date: String): MedicineRecord?
 
 

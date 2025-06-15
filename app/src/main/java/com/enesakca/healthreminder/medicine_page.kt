@@ -35,10 +35,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -88,6 +91,12 @@ fun medicine_page(navController : NavController, viewModel : MedicineViewModel =
 
     Box(modifier = Modifier.fillMaxSize(),contentAlignment = Alignment.Center
         ){
+        Image(
+            painter = painterResource(id = R.drawable.bg),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.matchParentSize().alpha(0.7f)
+        )
         Column() {
             Row(Modifier.align(Alignment.CenterHorizontally)) {
                 OutlinedTextField(
@@ -105,6 +114,28 @@ fun medicine_page(navController : NavController, viewModel : MedicineViewModel =
                 )
             }
 
+            Spacer(modifier = Modifier.height(25.dp))
+
+
+            Row(Modifier.align(Alignment.CenterHorizontally)) {
+                OutlinedTextField(
+                    value = stock,
+                    onValueChange = {stock = it},
+                    label = {Text("Elinizde kaç tablet ilaç var *")},keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number
+                    )
+                )
+            }
+
+            Spacer(modifier = Modifier.height(25.dp))
+            Row(Modifier.align(Alignment.CenterHorizontally)) {
+                OutlinedTextField(
+                    value = alertStock,
+                    onValueChange = {alertStock = it},
+                    label = {Text("Kaç tablet kalınca uyarı istersiniz *")},
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+            }
             Spacer(modifier = Modifier.height(25.dp))
             Row(
                 Modifier.align(Alignment.CenterHorizontally)
@@ -125,49 +156,10 @@ fun medicine_page(navController : NavController, viewModel : MedicineViewModel =
                     }
                 )
             }
-            Spacer(modifier = Modifier.height(25.dp))
-            Row (Modifier.align(Alignment.CenterHorizontally)){
-                OutlinedTextField(
-                    value = selectedDate,
-                    onValueChange = {},
-                    label = { Text("Başlangıç Tarihi *") },
-                    modifier = Modifier
-                        .clickable { datePicker.show() },
-                    enabled = false,
-                    singleLine = true,
-                    trailingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = "Hapların İlk Gün Yönetimi"
-                        )
-                    }
-                )
-            }
-            Spacer(modifier = Modifier.height(25.dp))
-
-            Row(Modifier.align(Alignment.CenterHorizontally)) {
-                OutlinedTextField(
-                    value = stock,
-                    onValueChange = {stock = it},
-                    label = {Text("Elinizde kaç tablet ilaç var *")},keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number
-                    )
-                )
-            }
-
-            Spacer(modifier = Modifier.height(25.dp))
-            Row(Modifier.align(Alignment.CenterHorizontally)) {
-                OutlinedTextField(modifier = Modifier.padding(20.dp,0.dp,20.dp,30.dp),
-                    value = alertStock,
-                    onValueChange = {alertStock = it},
-                    label = {Text("Kaç tablet kalınca uyarı istersiniz *")},
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)// klavyede giriş için sayı çıkacak
-                )
-            }
             Button(modifier = Modifier.align(Alignment.CenterHorizontally),onClick = {
 
 
-                if (medicine_name.isBlank() || medicine_mg.isBlank() || stock.isBlank() || selectedTime.isBlank() || selectedDate.isBlank()) {
+                if (medicine_name.isBlank() || medicine_mg.isBlank() || stock.isBlank() || selectedTime.isBlank() ) {
                     Toast.makeText(context, "Lütfen zorunlu alanları doldurun!", Toast.LENGTH_SHORT).show()
                     return@Button
                 }
@@ -182,7 +174,11 @@ fun medicine_page(navController : NavController, viewModel : MedicineViewModel =
                     alertStock = alertStock.toInt()
                 )
                 viewModel.addMedicine(medicine)
-                navController.popBackStack()
+                navController.navigate("stock_page"){
+                    popUpTo("medicine_page") { inclusive = true }
+
+
+                }
             }) {
                 Text("Kaydet")
             }
